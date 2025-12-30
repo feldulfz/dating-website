@@ -2,7 +2,7 @@
     <div class="flex align-middle items-center px-10 mx-auto gap-6">
         <div class="text-white">
             <!-- <a routerLink="/" routerLinkActive="text-accent" [routerLinkActiveOptions]="{exact: true}" -->
-             <a routerLink="/" routerLinkActive="text-accent"
+            <a routerLink="/" routerLinkActive="text-accent"
                 class="flex items-center gap-3 max-h-16 border-r-white border-r-2 pr-6">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
                     <path
@@ -22,6 +22,14 @@
                 <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
                 <a *appHasRole="['Admin', 'Moderator']" routerLink="/admin" routerLinkActive="text-accent">Admin</a>
             } -->
+
+            <a routerLink="/members" routerLinkActive="text-accent">
+                Matches
+            </a>
+            <a routerLink="/lists" routerLinkActive="text-accent">Lists</a>
+            <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+            <a routerLink="/admin" routerLinkActive="text-accent">Admin</a>
+
             <a routerLink="/errors" routerLinkActive="text-accent">Errors</a>
 
         </nav>
@@ -76,6 +84,45 @@
                 </button>
             </form>
             } -->
+
+            @if (accountService.currentUser(); as user) {
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" 
+                    class="flex items-center text-white text-xl gap-3 cursor-pointer">
+                    <img src="/user.png" alt="user avatar" class="w-10 h-10 rounded-full">
+                    <span>{{user.displayName}}</span>
+                </div>
+                <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    <li><a>Edit profile</a></li>
+                    <li><a (click)="logout()">Logout</a></li>
+                </ul>
+            </div>
+
+            <!-- <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="flex items-center text-white text-xl gap-3 cursor-pointer">
+                    <img [src]="user?.imageUrl || '/user.png'" alt="user avatar" class="w-10 h-10 rounded-full">
+                    <span>{{user.displayName}}</span>
+                </div>
+                <ul (click)="handleSelectUserItem()" tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    <li><a routerLink="/members/{{user.id}}">Edit profile</a></li>
+                    <li><a (click)="logout()">Logout</a></li>
+                </ul>
+            </div> -->
+
+            } @else {
+            <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
+                <input [(ngModel)]="creds.email" name="email" type="text" class="input" placeholder="Email">
+                <input [(ngModel)]="creds.password" name="password" type="password" class="input"
+                    placeholder="Password">
+                <button type="submit" class="btn btn-primary">
+                    <!-- @if (loading()) {
+                                <span class="mr-2 loading loading-spinner"></span>
+                            } -->
+                    Login
+                </button>
+            </form>
+            }
+
         </div>
 
     </div>

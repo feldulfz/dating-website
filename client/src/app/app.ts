@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { Nav } from "../layout/nav/nav";
+import { AccountService } from '../core/services/account-service';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +10,23 @@ import { Nav } from "../layout/nav/nav";
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit{
+export class App implements OnInit {
+  private accountService = inject(AccountService);
   private http = inject(HttpClient);
   protected readonly title = signal('Dating App');
   protected members = signal<any>([]);
 
   async ngOnInit() {
     this.members.set(await this.getMembers());
+    this.setCurrentUser();
+  }
+
+  setCurrentUser() {
+    const userJson = localStorage.getItem('user');
+    if (!userJson) return;
+
+    const user = JSON.parse(userJson);
+    this.accountService.currentUser.set(user);
   }
 
   async getMembers() {
